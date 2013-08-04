@@ -1,13 +1,17 @@
 package ru.guap.player.controller;
 
 import ru.guap.player.events.*;
+import ru.guap.player.model.*;
 import ru.guap.player.view.*;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 class Behavior {
-	public static class OnFilesOpen implements IEvent {
+	static View view;
+	static Model model;
+
+	static class OnFilesOpen implements IEvent {
 		@Override
 		public void run ( Object sender, EventArgs args ) {
 			JFileChooser chooser = new JFileChooser();
@@ -21,10 +25,10 @@ class Behavior {
 		}
 	}
 	
-	public static class OnEqOpen implements IEvent {
+	static class OnEqOpen implements IEvent {
 		@Override                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 		public void run ( Object sender, EventArgs args ) {
-			( ( View.MainFrame ) sender ).v.equalizerDialog.setVisible ( true );
+			view.equalizerDialog.setVisible ( true );
 		}
 	}
 }

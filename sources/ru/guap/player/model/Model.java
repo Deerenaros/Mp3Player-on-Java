@@ -14,16 +14,19 @@ public class Model {
 	}
 	
 	public void initDB () {
-		try {
-			myServer = OServerMain.create();
-			myServer.startup(new File("db.config"));
-			myServer.activate();
-		} catch ( Exception e ) {
-			System.out.println ( " |||=> ERROR: " + e.getMessage () );
+		if ( myServer == null ) {
+			try {
+				myServer = OServerMain.create();
+				myServer.startup(new File("db.config"));
+				myServer.activate();
+			} catch ( Exception e ) {
+				System.out.println ( " |||=> ERROR: " + e.getMessage () );
+			}
 		}
 	}
 	
 	public void closeDB () {
 		myServer.shutdown();
+		myServer = null;
 	}
 }
