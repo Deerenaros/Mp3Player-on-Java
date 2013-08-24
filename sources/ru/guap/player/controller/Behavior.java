@@ -7,20 +7,35 @@ import ru.guap.player.view.*;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import java.io.File;
+import java.util.*;
+
 class Behavior {
 	static View view;
 	static Model model;
+	static BasicPlayer player;
 
-	static class OnFilesOpen implements IEvent {
+	static class MainFrameEvents implements IEvent {
+		@Override
+		public void run ( Object sender, EventArgs args ) {
+			System.out.println ( args );
+		}
+	}
+	
+	/*static class OnFilesOpen implements IEvent {
 		@Override
 		public void run ( Object sender, EventArgs args ) {
 			JFileChooser chooser = new JFileChooser();
 			chooser.setFileFilter ( new FileNameExtensionFilter( "MP3 Music", "mp3" ) );
+			chooser.setMultiSelectionEnabled ( true );
 			if ( chooser.showOpenDialog ( null ) == JFileChooser.APPROVE_OPTION ) {
-				String[] listData = {
-					chooser.getSelectedFile().getName()
-				};
-				( ( View.MainFrame ) sender ).playlist.setListData ( listData );
+				File[] files = chooser.getSelectedFiles();
+				List < String > lst = new LinkedList ();
+				for ( File f: files ) {
+					model.playlist.add ( f );
+					lst.add ( f.getName () );
+				}
+				( ( View.MainFrame ) sender ).playlist.setListData ( lst.toArray () );
 			}
 		}
 	}
@@ -31,4 +46,35 @@ class Behavior {
 			view.equalizerDialog.setVisible ( true );
 		}
 	}
+	
+	static class OnPlayPause implements IEvent {
+		@Override
+		public void run ( Object sender, EventArgs args ) {
+			try {
+				if ( model.playlist != null && model.playlist.getCurrent () != null ) {
+					if ( !player.isPlaying () ) {
+						player.play ( model.playlist.getCurrent () );
+					} else {
+						player.pause ();
+					}
+				}
+			} catch ( Exception e ) {
+				System.out.println ( e.getMessage () );
+			}
+		}
+	}
+	
+	static class OnNextClick implements IEvent {
+		@Override
+		public void run ( Object sender, EventArgs args ) {
+			
+		}
+	}
+	
+	static class OnPrevClick implements IEvent {
+		@Override
+		public void run ( Object sender, EventArgs args ) {
+			
+		}
+	}*/
 }

@@ -3,7 +3,7 @@ package ru.guap.player.events;
 import java.util.*;
 
 public class Event implements IEvent {
-	//public static connect ( Object sender, Object actionType, IEvent handler );
+	public static enum Type { BTN_CLICK };
 
 	private List <IEvent> myEvents;
 
@@ -25,7 +25,7 @@ public class Event implements IEvent {
 	
 	public void run ( Object sender, EventArgs arg ) {
 		for ( IEvent ev: myEvents ) {
-			ev.run( sender, arg );
+			ev.run ( sender, arg );
 		}
 	}
 }

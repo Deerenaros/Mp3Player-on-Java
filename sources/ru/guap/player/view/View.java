@@ -6,9 +6,12 @@ import ru.guap.player.events.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 
 public class View {
-	public class MainFrame extends JFrame {
+	public static class MainFrame extends JFrame {
+		public static enum Button { PLAYPAUSE, STOP, OPENFILES, NEXT, PREV };
+	
 		private Container content;
 		
 		private final JButton play_pause;
@@ -17,39 +20,30 @@ public class View {
 		private final JButton next;
 		private final JButton prev;
 		
+		private final Map < JButton, Button > buttons;
+		
 		public final JList playlist;
 		
-		public final Event onPlayPauseClick;
-		public final Event onStop;
-		public final Event onOpenFilesClick;
-		public final Event onNextClick;
-		public final Event onPrevClick;
+		
+		public final Event event;
 		
 		MainFrame () {
 			super ( "MP# Player" );
 			
-			stop = new JButton ( "Stop" );
-			play_pause = new JButton ( "Play/Pause" );
-			openFiles = new JButton ( "Open" );
-			next = new JButton ( "=>" );
-			prev = new JButton ( "<=" );
+			buttons = new HashMap ();
+			
+			buttons.put ( stop = new JButton ( "Stop" ),			Button.STOP );
+			buttons.put ( play_pause = new JButton ( "Play/Pause" ),Button.PLAYPAUSE );
+			buttons.put ( openFiles = new JButton ( "Open" ),		Button.OPENFILES );
+			buttons.put ( next = new JButton ( "=>" ),				Button.NEXT );
+			buttons.put ( prev = new JButton ( "<=" ),				Button.PREV );
 			
 			playlist = new JList ();
-			String[] listData =
-			{
-				"Item 1",
-				"Item 2",
-				"Item 3",
-				"Item 4"
-			};
-			playlist.setListData ( listData );
+			/*String[] listData = {};
+			playlist.setListData ( listData );*/
 			playlist.setMinimumSize ( new Dimension ( 1, 300 ) );
 			
-			onPlayPauseClick = new Event ();
-			onStop = new Event ();
-			onOpenFilesClick = new Event ();
-			onNextClick = new Event ();
-			onPrevClick = new Event ();
+			event = new Event ();
 		}
 		
 		public void makeGUI () {
@@ -73,38 +67,22 @@ public class View {
 		}
 		
 		public void registerEvents () {
-			final Object _this = this;
+			final Object that = this;
 			
-			openFiles.addActionListener ( new ActionListener () {
+			ActionListener action = new ActionListener () {
 				@Override
 				public void actionPerformed ( ActionEvent e ) {
-					onOpenFilesClick.run( _this, EventArgs.Empty );
+					EventArgs args = new EventArgs (
+						new EventArgs.Arg ( "Type", Event.Type.BTN_CLICK ),
+						new EventArgs.Arg ( "Button", buttons.get ( e.getSource () ) )
+					);
+					event.run ( that, args );
 				}
-			} );
-			stop.addActionListener ( new ActionListener () {
-				@Override
-				public void actionPerformed ( ActionEvent e ) {
-					onStop.run( _this, EventArgs.Empty );
-				}
-			} );
-			play_pause.addActionListener ( new ActionListener () {
-				@Override
-				public void actionPerformed ( ActionEvent e ) {
-					onPlayPauseClick.run( _this, EventArgs.Empty );
-				}
-			} );;
-			next.addActionListener ( new ActionListener () {
-				@Override
-				public void actionPerformed ( ActionEvent e ) {
-					onNextClick.run( _this, EventArgs.Empty );
-				}
-			} );;
-			prev.addActionListener ( new ActionListener () {
-				@Override
-				public void actionPerformed ( ActionEvent e ) {
-					onPrevClick.run( _this, EventArgs.Empty );
-				}
-			} );;
+			};
+			
+			for ( JButton b: buttons.keySet () ) {
+				b.addActionListener ( action );
+			}
 		}
 	}
 	
@@ -124,7 +102,7 @@ public class View {
 		private Container content;
 	
 		EqualizerDialog () {
-			super ("");
+			super ( "Equalizer" );
 		}
 		
 		public void makeGUI () {

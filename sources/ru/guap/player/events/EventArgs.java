@@ -3,15 +3,20 @@ package ru.guap.player.events;
 import java.util.*;
 
 public class EventArgs {
-	static public final EventArgs Empty = new EventArgs ();
+	static public final EventArgs Empty = null;
 
-	public class Arg {
+	public static class Arg {
 		String n;
 		Object v;
 		
 		public Arg ( String name, Object value ) {
-			name = n;
-			value = v;
+			n = name;
+			v = value;
+		}
+		
+		@Override
+		public String toString () {
+			return "(" + n + ": " + v + ")";
 		}
 	}
 
@@ -26,5 +31,10 @@ public class EventArgs {
 	
 	public Object getArg ( String name ) {
 		return myArgs.get ( name );
+	}
+	
+	@Override
+	public String toString () {
+		return myArgs.toString ();
 	}
 }
