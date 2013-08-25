@@ -29,7 +29,7 @@ public class EventArgs {
 		}
 	}
 	
-	public Object getArg ( String name ) {
+	public Object get ( String name ) {
 		return myArgs.get ( name );
 	}
 	
